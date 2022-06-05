@@ -5,7 +5,8 @@ pipeline {
     stages {
         stage('Source') {
             steps {
-                git 'https://github.com/JRuedas/unir-cicd'
+                // git 'https://github.com/JRuedas/unir-cicd'
+                git 'https://github.com/JRuedas/unir-test'
             }
         }
         stage('Build') {
@@ -38,12 +39,17 @@ pipeline {
     post {
         always {
             junit 'results/*_result.xml'
+            publishHTML (target : [allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'results',
+                reportFiles: '*_result.html',
+                reportName: 'Test Reports',
+                reportTitles: 'Test Reports'])
             cleanWs()
         }
         failure {
-            // mail to: "developer@example.com",
-            // subject: "Jenkins build failed",
-            // body: "Build $BUILD_NUMBER from job $JOB_NAME has failed."
+            emailext body: "Sending mail with body: Build $BUILD_NUMBER from job $JOB_NAME has failed.", subject: 'Jenkins build failed', to: 'developer@example.com'
             echo "Sending mail with body: Build $BUILD_NUMBER from job $JOB_NAME has failed."
         }
     }
