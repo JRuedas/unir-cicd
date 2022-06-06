@@ -20,7 +20,7 @@ pipeline {
                 sh 'make test-unit'
                 archiveArtifacts artifacts: 'results/*.xml'
                 // Generacion de error para probar el envio del email cuando falla la pipeline.
-                error("Generating pipeline failure to test post email section.")
+                // error("Generating pipeline failure to test post email section.")
             }
         }
         stage('API tests') {
